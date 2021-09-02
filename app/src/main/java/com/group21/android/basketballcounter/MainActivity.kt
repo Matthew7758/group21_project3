@@ -17,4 +17,5 @@ class MainActivity : AppCompatActivity() {
     fun threeTeam2(view: View) {}
     fun twoTeam2(view: View) {}
     fun oneTeam2(view: View) {}
+    fun resetScore(view: View) {}
 }

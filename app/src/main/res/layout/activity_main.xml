@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.group21.android.basketballcounter.MainActivity">
-
     <LinearLayout
         android:id="@+id/title"
         android:layout_width="match_parent"
@@ -18,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:ems="14"
-            android:text="@string/app_name"
+            android:text="@string/scoreCounter"
             android:fontFamily="sans-serif-black"
             android:textAlignment="center"
             android:textColor="@android:color/white"
@@ -160,6 +159,28 @@
                 android:onClick="oneTeam2"
                 android:text="@string/freeThrow" />
         </LinearLayout>
+
     </LinearLayout>
+
+    <GridLayout
+        android:id="@+id/resetLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="0dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/resetButton"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            android:onClick="resetScore"
+            android:text="@string/reset" />
+
+
+    </GridLayout>
 
 </RelativeLayout>

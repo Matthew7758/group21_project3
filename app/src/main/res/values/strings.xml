@@ -6,4 +6,6 @@
     <string name="freeThrow">Free Throw</string>
     <string name="team2Name">Team 2</string>
     <string name="ZeroScore">0</string>
+    <string name="scoreCounter">Score Counter</string>
+    <string name="reset">Reset</string>
 </resources>
