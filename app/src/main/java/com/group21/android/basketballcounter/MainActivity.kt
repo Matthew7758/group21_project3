@@ -1,5 +1,6 @@
 package com.group21.android.basketballcounter
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -15,44 +16,49 @@ class MainActivity : AppCompatActivity() {
     private val mainViewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
-
+    var mp: MediaPlayer? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         mainViewModel.score1 = savedInstanceState?.getInt(SCORE1, 0) ?: 0
         mainViewModel.score2 = savedInstanceState?.getInt(SCORE2, 0) ?: 0
 
-
         val threeTeam1 = findViewById<Button>(R.id.threeTeam1)
         threeTeam1.setOnClickListener {
             mainViewModel.threeTeam1()
+            playTriple()
             displayScore1(mainViewModel.score1)
         }
         val twoTeam1 = findViewById<Button>(R.id.twoTeam1)
         twoTeam1.setOnClickListener {
             mainViewModel.twoTeam1()
+            playDouble()
             displayScore1(mainViewModel.score1)
 
         }
         val oneTeam1 = findViewById<Button>(R.id.oneTeam1)
         oneTeam1.setOnClickListener {
             mainViewModel.oneTeam1()
+            playSingle()
             displayScore1(mainViewModel.score1)
         }
         val threeTeam2 = findViewById<Button>(R.id.threeTeam2)
         threeTeam2.setOnClickListener {
             mainViewModel.threeTeam2()
+            playTriple()
             displayScore2(mainViewModel.score2)
 
         }
         val twoTeam2 = findViewById<Button>(R.id.twoTeam2)
         twoTeam2.setOnClickListener {
             mainViewModel.twoTeam2()
+            playDouble()
             displayScore2(mainViewModel.score2)
         }
         val oneTeam2 = findViewById<Button>(R.id.oneTeam2)
         oneTeam2.setOnClickListener {
             mainViewModel.oneTeam2()
+            playSingle()
             displayScore2(mainViewModel.score2)
         }
 
@@ -108,4 +114,53 @@ class MainActivity : AppCompatActivity() {
         val scoreView2: TextView = findViewById(R.id.team2Score)
         scoreView2.text = score.toString()
     }
+
+    fun stopSound() {
+        if (mp != null) {
+            mp!!.stop()
+            mp!!.release()
+            mp = null
+        }
+    }
+
+    private fun playTriple() {
+        if (mp == null) {
+            mp = MediaPlayer.create(this, R.raw.mlgtriple)
+            mp!!.isLooping = false
+            mp!!.start()
+        } else {
+            stopSound()
+            mp = MediaPlayer.create(this, R.raw.mlgtriple)
+            mp!!.isLooping = false
+            mp!!.start()
+        }
+
+    }
+
+    private fun playDouble() {
+        if (mp == null) {
+            mp = MediaPlayer.create(this, R.raw.mlgairhorn)
+            mp!!.isLooping = false
+            mp!!.start()
+        } else {
+            stopSound()
+            mp = MediaPlayer.create(this, R.raw.mlgairhorn)
+            mp!!.isLooping = false
+            mp!!.start()
+        }
+    }
+
+    private fun playSingle() {
+        if (mp == null) {
+            mp = MediaPlayer.create(this, R.raw.hitmarker)
+            mp!!.isLooping = false
+            mp!!.start()
+        } else {
+            stopSound()
+            mp = MediaPlayer.create(this, R.raw.hitmarker)
+            mp!!.isLooping = false
+            mp!!.start()
+        }
+    }
+
 }
