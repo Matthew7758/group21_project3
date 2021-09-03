@@ -7,6 +7,10 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 
+private const val TAG = "MainActivity"
+private const val SCORE1 = "score1"
+private const val SCORE2 = "score2"
+
 class MainActivity : AppCompatActivity() {
     private val mainViewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
@@ -15,6 +19,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        mainViewModel.score1 = savedInstanceState?.getInt(SCORE1, 0) ?: 0
+        mainViewModel.score2 = savedInstanceState?.getInt(SCORE2, 0) ?: 0
+
+
         val threeTeam1 = findViewById<Button>(R.id.threeTeam1)
         threeTeam1.setOnClickListener {
             mainViewModel.threeTeam1()
@@ -56,32 +64,39 @@ class MainActivity : AppCompatActivity() {
         }
         displayScore1(mainViewModel.score1)
         displayScore2(mainViewModel.score2)
-        Log.d("MainActivity", "onCreate Called")
+        Log.d(TAG, "onCreate Called")
     }
 
     override fun onStart() {
         super.onStart()
-        Log.d("MainActivity", "onStart Called")
+        Log.d(TAG, "onStart Called")
     }
 
     override fun onStop() {
         super.onStop()
-        Log.d("MainActivity", "onStop Called")
+        Log.d(TAG, "onStop Called")
     }
 
     override fun onResume() {
         super.onResume()
-        Log.d("MainActivity", "onResume Called")
+        Log.d(TAG, "onResume Called")
     }
 
     override fun onPause() {
         super.onPause()
-        Log.d("MainActivity", "onPause Called")
+        Log.d(TAG, "onPause Called")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        Log.d(TAG, "onSaveInstanceState")
+        outState.putInt(SCORE1, mainViewModel.score1)
+        outState.putInt(SCORE2, mainViewModel.score2)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d("MainActivity", "onDestroy Called")
+        Log.d(TAG, "onDestroy Called")
     }
 
     private fun displayScore1(score: Int) {
