@@ -7,6 +7,8 @@ private const val TAG = "MainViewModel"
 class MainViewModel : ViewModel() {
     var score1 = 0
     var score2 = 0
+    var team1 = "Team 1"
+    var team2 = "Team 2"
 
     /*init {
         Log.d(TAG, "ViewModel instance created")

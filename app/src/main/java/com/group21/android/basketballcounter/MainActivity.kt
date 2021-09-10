@@ -2,15 +2,22 @@ package com.group21.android.basketballcounter
 
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import kotlinx.android.synthetic.main.activity_main.*
+
 
 private const val TAG = "MainActivity"
 private const val SCORE1 = "score1"
 private const val SCORE2 = "score2"
+private const val TEAM1 = "team1"
+private const val TEAM2 = "team2"
 
 class MainActivity : AppCompatActivity() {
     private val mainViewModel: MainViewModel by lazy {
@@ -22,7 +29,33 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         mainViewModel.score1 = savedInstanceState?.getInt(SCORE1, 0) ?: 0
         mainViewModel.score2 = savedInstanceState?.getInt(SCORE2, 0) ?: 0
+        mainViewModel.team1 = savedInstanceState?.getString(TEAM1, "Team 1") ?: "Team 1"
+        mainViewModel.team2 = savedInstanceState?.getString(TEAM2, "Team 2") ?: "Team 2"
+        val editableT1 = findViewById<EditText>(R.id.team1Name)
+        val editableT2 = findViewById<EditText>(R.id.team2Name)
+        editableT1.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
 
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                mainViewModel.team1 = editableT1.text.toString()
+            }
+        })
+        editableT2.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                mainViewModel.team2 = editableT2.text.toString()
+                }
+
+        })
         val threeTeam1 = findViewById<Button>(R.id.threeTeam1)
         threeTeam1.setOnClickListener {
             mainViewModel.threeTeam1()
@@ -67,14 +100,16 @@ class MainActivity : AppCompatActivity() {
             mainViewModel.resetScore()
             displayScore1(mainViewModel.score1)
             displayScore2(mainViewModel.score2)
+            displayTeamNames("Team 1", "Team 2")
         }
-        val vinnyBtn = findViewById<Button>(R.id.saveButton)
-        vinnyBtn.setOnClickListener {
+        /*val saveBtn = findViewById<Button>(R.id.saveButton)
+        saveBtn.setOnClickListener {
             //TODO: Write code to inflate second view with intents and such.
 
-        }
+        }*/
         displayScore1(mainViewModel.score1)
         displayScore2(mainViewModel.score2)
+        displayTeamNames(mainViewModel.team1, mainViewModel.team2)
         Log.d(TAG, "onCreate Called")
     }
 
@@ -118,6 +153,12 @@ class MainActivity : AppCompatActivity() {
     private fun displayScore2(score: Int) {
         val scoreView2: TextView = findViewById(R.id.team2Score)
         scoreView2.text = score.toString()
+    }
+    private fun displayTeamNames(t1: String, t2: String) {
+        val team1Name: EditText = findViewById(R.id.team1Name)
+        val team2Name: EditText = findViewById(R.id.team2Name)
+        team1Name.text = Editable.Factory.getInstance().newEditable(t1)
+        team2Name.text = Editable.Factory.getInstance().newEditable(t2)
     }
 
     fun stopSound() {

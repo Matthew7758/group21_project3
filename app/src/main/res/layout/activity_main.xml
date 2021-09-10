@@ -49,7 +49,7 @@
                     android:layout_height="75dp"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <EditText
                         android:id="@+id/team1Name"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -117,12 +117,13 @@
                     android:layout_height="75dp"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <EditText
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:ems="12"
                         android:fontFamily="sans-serif-black"
                         android:gravity="center"
+                        android:id="@+id/team2Name"
                         android:text="@string/team2Name"
                         android:textAlignment="center"
                         android:textSize="16sp" />
