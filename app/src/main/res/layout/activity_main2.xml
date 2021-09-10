@@ -65,10 +65,10 @@
             android:gravity="center">
 
             <Button
-                android:id="@+id/backBtn"
+                android:id="@+id/pogBtn"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:text="@string/back" />
+                android:text="@string/pog" />
         </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

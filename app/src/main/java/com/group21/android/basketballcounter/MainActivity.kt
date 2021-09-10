@@ -1,5 +1,6 @@
 package com.group21.android.basketballcounter
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.text.Editable
@@ -8,9 +9,9 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 private const val TAG = "MainActivity"
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {
                 mainViewModel.team2 = editableT2.text.toString()
-                }
+            }
 
         })
         val threeTeam1 = findViewById<Button>(R.id.threeTeam1)
@@ -102,15 +103,36 @@ class MainActivity : AppCompatActivity() {
             displayScore2(mainViewModel.score2)
             displayTeamNames("Team 1", "Team 2")
         }
-        /*val saveBtn = findViewById<Button>(R.id.saveButton)
+        val saveBtn = findViewById<Button>(R.id.saveButton)
         saveBtn.setOnClickListener {
             //TODO: Write code to inflate second view with intents and such.
-
-        }*/
+            val intent = Intent(this@MainActivity, Main2Activity::class.java)
+            startActivityForResult(intent, 1)
+        }
         displayScore1(mainViewModel.score1)
         displayScore2(mainViewModel.score2)
         displayTeamNames(mainViewModel.team1, mainViewModel.team2)
         Log.d(TAG, "onCreate Called")
+    }
+
+    @Override
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d("TEST", "ONACTIVITYRESULT CALLED")
+        Log.d("TEST", "requestCode = $requestCode")
+        if (requestCode === 1) {
+            Log.d("TEST", "resultCode = $resultCode")
+            if (resultCode === RESULT_OK) {
+                Log.d("TEST", "RESULT_OK")
+                val result = data?.getStringExtra("result")
+                Log.d("TEST", result.toString())
+                Toast.makeText(applicationContext, result.toString(), Toast.LENGTH_SHORT).show()
+            }
+            if (resultCode === RESULT_CANCELED) {
+                // Write your code if there's no result
+                Toast.makeText(applicationContext, "Unpog.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onStart() {
