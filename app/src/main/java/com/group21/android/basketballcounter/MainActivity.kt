@@ -68,6 +68,11 @@ class MainActivity : AppCompatActivity() {
             displayScore1(mainViewModel.score1)
             displayScore2(mainViewModel.score2)
         }
+        val vinnyBtn = findViewById<Button>(R.id.vinnyButton)
+        vinnyBtn.setOnClickListener {
+            //TODO: Write code to inflate second view with intents and such.
+            
+        }
         displayScore1(mainViewModel.score1)
         displayScore2(mainViewModel.score2)
         Log.d(TAG, "onCreate Called")

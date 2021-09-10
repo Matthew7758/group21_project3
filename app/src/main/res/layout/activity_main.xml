@@ -172,12 +172,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center">
-
             <Button
                 android:id="@+id/resetButton"
-                android:layout_width="160dp"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:text="@string/reset" />
+            <Button
+                android:id="@+id/vinnyButton"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:text="Vinny Pog" />
         </LinearLayout>
     </LinearLayout>
 
