@@ -8,4 +8,5 @@
     <string name="ZeroScore">0</string>
     <string name="scoreCounter">Score Counter</string>
     <string name="reset">Reset</string>
+    <string name="back">Back</string>
 </resources>
