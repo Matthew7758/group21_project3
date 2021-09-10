@@ -9,4 +9,6 @@
     <string name="scoreCounter">Score Counter</string>
     <string name="reset">Reset</string>
     <string name="back">Back</string>
+    <string name="save">Save</string>
+    <string name="display">Display</string>
 </resources>

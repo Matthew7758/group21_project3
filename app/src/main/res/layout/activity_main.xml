@@ -174,14 +174,19 @@
             android:gravity="center">
             <Button
                 android:id="@+id/resetButton"
-                android:layout_width="120dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:text="@string/reset" />
             <Button
-                android:id="@+id/vinnyButton"
-                android:layout_width="120dp"
+                android:id="@+id/saveButton"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:text="Vinny Pog" />
+                android:text="@string/save" />
+            <Button
+                android:id="@+id/displayButton"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="@string/display" />
         </LinearLayout>
     </LinearLayout>
 
