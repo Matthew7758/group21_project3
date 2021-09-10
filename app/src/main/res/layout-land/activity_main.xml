@@ -163,12 +163,21 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="0dp"
         android:orientation="horizontal">
-
         <Button
             android:id="@+id/resetButton"
-            android:layout_width="160dp"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="@string/reset" />
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/save" />
+        <Button
+            android:id="@+id/displayButton"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="@string/display" />
     </GridLayout>
 
 </RelativeLayout>
