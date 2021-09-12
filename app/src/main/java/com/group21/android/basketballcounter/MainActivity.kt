@@ -11,9 +11,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val fragment = GameListFragment.newInstance()
+
+
         val ft = supportFragmentManager.beginTransaction()
         Log.d("TEST", "BEGIN TRANSACTION SUCCEEDED")
-        ft.replace(R.id.fragment_placeholder, fragment_main())
+        ft.replace(R.id.fragment_placeholder, fragment)
         Log.d("TEST", "FRAGMENT REPLACE SUCCEEDED")
         ft.commit()
         Log.d("TEST", "FRAGMENT COMMIT SUCCEEDED")
