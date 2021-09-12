@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
@@ -52,6 +53,7 @@ class GameListFragment : Fragment() {
         val dateTextView: TextView = itemView.findViewById(R.id.game_date)
         val teamsTextView: TextView = itemView.findViewById(R.id.team_titles)
         val teamScores: TextView = itemView.findViewById(R.id.team_scores)
+        val teamImage: ImageView = itemView.findViewById(R.id.teamImage)
     }
 
     private inner class GameAdapter(var games: List<Game>)
@@ -69,6 +71,12 @@ class GameListFragment : Fragment() {
                 dateTextView.text = game.date.toString()
                 teamsTextView.text = "Team ".plus(game.team1Name).plus(":Team ").plus(game.team2Name)
                 teamScores.text = String.format("%d", game.team1Score).plus(":").plus(String.format("%d", game.team2Score))
+                if(game.team1Score > game.team2Score) {
+                    teamImage.setImageResource(R.drawable.vinnypog)
+                }
+                else {
+                    teamImage.setImageResource(R.drawable.vandarkholme)
+                }
             }
         }
     }
