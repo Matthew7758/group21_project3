@@ -13,18 +13,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.fragment_main.team1Name
-import kotlinx.android.synthetic.main.fragment_main.team2Name
-import kotlinx.android.synthetic.main.fragment_main.threeTeam1
-import kotlinx.android.synthetic.main.fragment_main.threeTeam2
-import kotlinx.android.synthetic.main.fragment_main.twoTeam1
-import kotlinx.android.synthetic.main.fragment_main.twoTeam2
-import kotlinx.android.synthetic.main.fragment_main.oneTeam1
-import kotlinx.android.synthetic.main.fragment_main.oneTeam2
-import kotlinx.android.synthetic.main.fragment_main.team1Score
-import kotlinx.android.synthetic.main.fragment_main.team2Score
-import kotlinx.android.synthetic.main.fragment_main.resetButton
-import kotlinx.android.synthetic.main.fragment_main.saveButton
+import kotlinx.android.synthetic.main.fragment_main.*
+
+
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -166,6 +158,13 @@ class fragment_main : Fragment() {
             val intent = Intent(activity, Main2Activity::class.java)
             startActivityForResult(intent, 1)
         }
+        displayButton.setOnClickListener {
+            val nextFrag = GameListFragment.newInstance()
+            val ft = requireActivity().supportFragmentManager.beginTransaction()
+            ft.replace(((view as ViewGroup).parent as View).id, nextFrag)
+            ft.addToBackStack(null)
+            ft.commit()
+        }
         displayScore1(mainViewModel.score1)
         displayScore2(mainViewModel.score2)
         displayTeamNames(mainViewModel.team1, mainViewModel.team2)
@@ -236,6 +235,8 @@ class fragment_main : Fragment() {
         Log.d(TAG, "onSaveInstanceState")
         outState.putInt(SCORE1, mainViewModel.score1)
         outState.putInt(SCORE2, mainViewModel.score2)
+        outState.putString(TEAM1, mainViewModel.team1)
+        outState.putString(TEAM2, mainViewModel.team2)
     }
 
     @Override

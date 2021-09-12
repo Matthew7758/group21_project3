@@ -12,15 +12,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val fragment = GameListFragment.newInstance()
-
-
+        //val fragment = GameListFragment.newInstance()
         val ft = supportFragmentManager.beginTransaction()
         Log.d("TEST", "BEGIN TRANSACTION SUCCEEDED")
-        ft.replace(R.id.fragment_placeholder, fragment)
+        ft.replace(R.id.fragment_placeholder, fragment_main())
         Log.d("TEST", "FRAGMENT REPLACE SUCCEEDED")
         ft.commit()
         Log.d("TEST", "FRAGMENT COMMIT SUCCEEDED")
+
+        /*val ft = supportFragmentManager.beginTransaction()
+        ft.replace(R.id.fragment_placeholder, fragment)
+        ft.commit()*/
     }
 
 
