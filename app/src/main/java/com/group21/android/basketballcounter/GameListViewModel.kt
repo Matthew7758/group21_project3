@@ -14,8 +14,8 @@ class GameListViewModel : ViewModel() {
             game.index = i
             game.team1Score = Random.nextInt(0,100)
             game.team2Score = Random.nextInt(0,100)
-            game.team1Name = getRandomString(8)
-            game.team2Name = getRandomString(8)
+            game.team1Name = getRandomString(6)
+            game.team2Name = getRandomString(6)
             games += game
         }
     }
