@@ -35,6 +35,7 @@
                         android:ems="12"
                         android:fontFamily="sans-serif-black"
                         android:gravity="center"
+                        android:maxLength="10"
                         android:text="@string/team1Name"
                         android:textAlignment="center"
                         android:textSize="16sp" />
@@ -67,6 +68,7 @@
                         android:ems="12"
                         android:fontFamily="sans-serif-black"
                         android:gravity="center"
+                        android:maxLength="10"
                         android:id="@+id/team2Name"
                         android:text="@string/team2Name"
                         android:textAlignment="center"

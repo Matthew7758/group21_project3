@@ -1,82 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout5"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+
+    <TextView
+        android:id="@+id/game_date"
+        android:layout_width="0dp"
         android:layout_height="40dp"
-        android:orientation="horizontal">
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="0dp"
+        android:gravity="start"
+        android:text="Game Date"
+        app:layout_constraintBottom_toTopOf="@+id/team_titles"
+        app:layout_constraintEnd_toStartOf="@+id/teamImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/game_date"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:layout_weight="1"
-            android:text="Game Date" />
+    <ImageView
+        android:id="@+id/teamImage"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/winner_logo"
+        android:gravity="end"
+        app:layout_constraintBottom_toTopOf="@+id/team_scores"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/game_date"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
-        <ImageView
-            android:id="@+id/teamImage"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:gravity="end"
-            android:contentDescription="@string/winner_logo"/>
-    </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/mainLayout"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/team_titles"
+        android:layout_width="252dp"
         android:layout_height="25dp"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal">
+        android:layout_marginBottom="8dp"
+        android:ems="12"
+        android:fontFamily="sans-serif-black"
+        android:gravity="start"
+        android:maxLines="1"
+        android:text="Team 1 Name: Team 2 Name"
+        android:textAlignment="viewStart"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/team_scores"
+        app:layout_constraintStart_toStartOf="@+id/game_date"
+        app:layout_constraintTop_toBottomOf="@+id/game_date" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="25dp"
-            android:layout_weight="2"
-            android:orientation="vertical">
+    <TextView
+        android:id="@+id/team_scores"
+        android:layout_width="124dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="8dp"
+        android:ems="12"
+        android:fontFamily="sans-serif-black"
+        android:gravity="end"
+        android:text="T1 Score: T2 Score"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/teamImage"
+        app:layout_constraintStart_toEndOf="@+id/team_titles"
+        app:layout_constraintTop_toBottomOf="@+id/game_date"
+        app:layout_constraintVertical_bias="1.0" />
 
 
-            <TextView
-                android:id="@+id/team_titles"
-                android:ems="12"
-                android:fontFamily="sans-serif-black"
-                android:gravity="start"
-                android:textAlignment="viewStart"
-                android:textSize="16sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Team 1: Team 2"/>
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="25dp"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/team_scores"
-                android:ems="12"
-                android:fontFamily="sans-serif-black"
-                android:gravity="right"
-                android:textSize="16sp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Team 1 Score: Team 2 Score"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 <!-- TODO: make the list items be formatted properly. for now I am lazy and just wanna make sure
 shit works-->
