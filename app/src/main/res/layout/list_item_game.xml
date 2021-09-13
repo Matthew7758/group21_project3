@@ -41,6 +41,7 @@
         android:layout_width="252dp"
         android:layout_height="25dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
         android:ems="12"
         android:fontFamily="sans-serif-black"
         android:gravity="start"
@@ -50,7 +51,7 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/team_scores"
-        app:layout_constraintStart_toStartOf="@+id/game_date"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/game_date" />
 
     <TextView
@@ -58,13 +59,14 @@
         android:layout_width="124dp"
         android:layout_height="20dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
         android:ems="12"
         android:fontFamily="sans-serif-black"
         android:gravity="end"
         android:text="T1 Score: T2 Score"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/teamImage"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/team_titles"
         app:layout_constraintTop_toBottomOf="@+id/game_date"
         app:layout_constraintVertical_bias="1.0" />
