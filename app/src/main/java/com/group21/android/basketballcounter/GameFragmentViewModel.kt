@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import android.util.Log
 import java.util.*
 
-private const val TAG = "MainViewModel"
+private const val TAG = "FRAGMENT_MAIN"
 
 class GameFragmentViewModel : ViewModel() {
     private val gameRepository = GameRepository.get()
@@ -19,6 +19,16 @@ class GameFragmentViewModel : ViewModel() {
     fun loadGame(gameId: UUID) {
         Log.d("FRAGMENT_MAIN", gameId.toString())
         gameIdLiveData.value = gameId
+    }
+    fun saveGame(game : Game) {
+        Log.d("FRAGMENT_MAIN", "Saving Game")
+        Log.d(TAG, "Game = $game")
+        gameRepository.updateGame(game)
+    }
+    fun insertGame(game: Game) {
+        Log.d("FRAGMENT_MAIN", "Inserting new game")
+        Log.d(TAG, "Game = $game")
+        gameRepository.addGame(game)
     }
     var score1 = 0
     var score2 = 0

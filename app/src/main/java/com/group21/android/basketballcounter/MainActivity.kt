@@ -58,6 +58,4 @@ class MainActivity : AppCompatActivity(), GameListFragment.Callbacks {
         super.onDestroy()
         Log.d(TAG, "onDestroy Called")
     }
-
-
 }

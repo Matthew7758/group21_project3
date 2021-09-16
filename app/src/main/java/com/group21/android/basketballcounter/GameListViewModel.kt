@@ -11,11 +11,4 @@ class GameListViewModel(application: Application) : AndroidViewModel(application
     val games: List<Game> = gameDao.getAll()*/
     private val gameRepository = GameRepository.get()
     val gameListLiveData = gameRepository.getAll()
-
-    private fun getRandomString(length: Int): String {
-        val charset = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz0123456789"
-        return (1..length)
-            .map { charset.random() }
-            .joinToString("")
-    }
 }

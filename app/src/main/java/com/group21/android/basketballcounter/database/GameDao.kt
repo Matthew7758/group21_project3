@@ -14,11 +14,11 @@ interface GameDao {
     fun findByID(id : UUID): LiveData<Game>
 
     @Insert
-    fun insertAll(vararg games: Game)
+    fun insert(game: Game)
 
     @Delete
     fun delete(game : Game)
 
     @Update
-    fun updateGames(vararg games : Game)
+    fun update(game : Game)
 }

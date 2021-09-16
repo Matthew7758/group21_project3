@@ -10,15 +10,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import android.widget.Toast.LENGTH_LONG
 import android.widget.Toast.LENGTH_SHORT
-import androidx.lifecycle.Observer
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.game_fragment.*
 import java.util.*
-
+import kotlin.random.Random
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,8 +52,8 @@ class GameFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val gameId : UUID
-        if(arguments?.getSerializable(ARG_GAME_ID) != null)
+        val gameId: UUID
+        if (arguments?.getSerializable(ARG_GAME_ID) != null)
             gameId = arguments?.getSerializable(ARG_GAME_ID) as UUID
         else
             gameId = UUID.randomUUID()
@@ -160,11 +159,49 @@ class GameFragment : Fragment() {
 
         }
         saveButton.setOnClickListener {
-            //TODO: Write code to inflate second view with intents and such.
+            /*fun getRandomString(length: Int): String {
+                val charset = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz0123456789"
+                return (1..length)
+                    .map { charset.random() }
+                    .joinToString("")
+            }
+            for(i in 0 until 150) {
+                var game = Game(UUID.randomUUID(), getRandomString(6), getRandomString(6), Random.nextInt(0,100), Random.nextInt(0,100), Date())
+                gameViewModel.insertGame(game)
+            }*/
             val intent = Intent(activity, Main2Activity::class.java)
             startActivityForResult(intent, 1)
         }
         displayButton.setOnClickListener {
+            if (gameViewModel.gameLiveData.value != null) {
+                Log.d(TAG, "Saving new game in onStop()")
+                game = Game(
+                    game.id,
+                    gameViewModel.team1,
+                    gameViewModel.team2,
+                    gameViewModel.score1,
+                    gameViewModel.score2,
+                    Date()
+                )
+                gameViewModel.saveGame(game)
+            } else if (gameViewModel.score1 != 0 && gameViewModel.score2 != 0) {
+                game = Game(
+                    UUID.randomUUID(),
+                    gameViewModel.team1,
+                    gameViewModel.team2,
+                    gameViewModel.score1,
+                    gameViewModel.score2,
+                    Date()
+                )
+                gameViewModel.insertGame(game)
+            } else {
+                Toast.makeText(
+                    context?.applicationContext,
+                    "At least one score must be > 0 to save implicitly!",
+                    LENGTH_SHORT
+                ).show()
+            }
+
             val nextFrag = GameListFragment.newInstance()
             val ft = requireActivity().supportFragmentManager.beginTransaction()
             ft.replace(((view as ViewGroup).parent as View).id, nextFrag)
@@ -175,7 +212,8 @@ class GameFragment : Fragment() {
             viewLifecycleOwner,
             Observer { game ->
                 game?.let {
-                    Toast.makeText(context?.applicationContext, "Editing entry!", LENGTH_LONG).show()
+                    Toast.makeText(context?.applicationContext, "Editing entry!", LENGTH_SHORT)
+                        .show()
                     this.game = game
                     /*Log.d(TAG,"teamAScore = "+this.game.teamAScore)
                     Log.d(TAG,"teamBScore = "+this.game.teamBScore)
@@ -288,4 +326,5 @@ class GameFragment : Fragment() {
             }
         }
     }
+
 }
