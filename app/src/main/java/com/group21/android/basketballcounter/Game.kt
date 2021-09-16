@@ -10,11 +10,11 @@ import java.util.*
  */
 @Entity
 data class Game(
-    @PrimaryKey(autoGenerate = true)
-    val id: UUID,
-    @ColumnInfo(name = "teamAName") var teamAName: String,
-    @ColumnInfo(name = "teamBName") var teamBName: String,
-    @ColumnInfo(name = "teamAScore") var teamAScore: Int,
-    @ColumnInfo(name = "teamBScore") var teamBScore: Int,
-    @ColumnInfo(name = "date") var date: Int
+    @PrimaryKey()
+    @ColumnInfo(name = "id") val id: UUID = UUID.randomUUID(),
+    @ColumnInfo(name = "teamAName") val teamAName: String,
+    @ColumnInfo(name = "teamBName") val teamBName: String,
+    @ColumnInfo(name = "teamAScore") val teamAScore: Int,
+    @ColumnInfo(name = "teamBScore") val teamBScore: Int,
+    @ColumnInfo(name = "date") val date: Date = Date()
 )

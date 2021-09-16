@@ -17,15 +17,10 @@ private const val TAG = "GameListFragment"
 class GameListFragment : Fragment() {
 
     private lateinit var gameRecyclerView: RecyclerView
-    private var adapter: GameAdapter? = null
+    private var adapter: GameAdapter? = GameAdapter(emptyList())
 
     private val gameListViewModel: GameListViewModel by lazy {
         ViewModelProviders.of(this).get(GameListViewModel::class.java)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        Log.d(TAG, "Total games: ${gameListViewModel.games.size}")
     }
 
     override fun onCreateView(
@@ -33,18 +28,29 @@ class GameListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d(TAG, "onCreateView Entered")
         val view = inflater.inflate(R.layout.fragment_game_list, container, false)
         gameRecyclerView =
             view.findViewById(R.id.game_recycler_view) as RecyclerView
         gameRecyclerView.layoutManager = LinearLayoutManager(context)
-
-        updateUI()
+        gameRecyclerView.adapter = adapter
 
         return view
     }
 
-    private fun updateUI() {
-        val games = gameListViewModel.games
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        gameListViewModel.gameListLiveData.observe(
+            viewLifecycleOwner,
+            { games ->
+                games?.let {
+                    Log.i(TAG, "Got games ${games.size}")
+                    updateUI(games)
+                }
+            })
+    }
+
+    private fun updateUI(games: List<Game>) {
         adapter = GameAdapter(games)
         gameRecyclerView.adapter = adapter
     }
@@ -56,25 +62,26 @@ class GameListFragment : Fragment() {
         val teamImage: ImageView = itemView.findViewById(R.id.teamImage)
     }
 
-    private inner class GameAdapter(var games: List<Game>)
-        : RecyclerView.Adapter<GameHolder>() {
+    private inner class GameAdapter(var games: List<Game>) : RecyclerView.Adapter<GameHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
                 : GameHolder {
             val view = layoutInflater.inflate(R.layout.list_item_game, parent, false)
             return GameHolder(view)
         }
+
         override fun getItemCount() = games.size
         override fun onBindViewHolder(holder: GameHolder, position: Int) {
             val game = games[position]
             holder.apply {
                 dateTextView.text = game.date.toString()
-                teamsTextView.text = "Team ".plus(game.teamAName).plus(":Team ").plus(game.teamBName)
-                teamScores.text = String.format("%d", game.teamAScore).plus(":").plus(String.format("%d", game.teamBScore))
-                if(game.teamAScore > game.teamBScore) {
+                teamsTextView.text =
+                    "Team ".plus(game.teamAName).plus(":Team ").plus(game.teamBName)
+                teamScores.text = String.format("%d", game.teamAScore).plus(":")
+                    .plus(String.format("%d", game.teamBScore))
+                if (game.teamAScore > game.teamBScore) {
                     teamImage.setImageResource(R.drawable.vinnypog)
-                }
-                else {
+                } else {
                     teamImage.setImageResource(R.drawable.vandarkholme)
                 }
             }
@@ -84,6 +91,7 @@ class GameListFragment : Fragment() {
 
     companion object {
         fun newInstance(): GameListFragment {
+            Log.d(TAG, "newInstance Entered")
             return GameListFragment()
         }
     }
