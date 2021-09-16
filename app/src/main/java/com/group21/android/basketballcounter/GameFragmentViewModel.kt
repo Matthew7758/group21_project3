@@ -1,10 +1,25 @@
 package com.group21.android.basketballcounter
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import android.util.Log
+import java.util.*
 
 private const val TAG = "MainViewModel"
 
-class MainViewModel : ViewModel() {
+class GameFragmentViewModel : ViewModel() {
+    private val gameRepository = GameRepository.get()
+    private val gameIdLiveData = MutableLiveData<UUID>()
+    var gameLiveData: LiveData<Game> =
+        Transformations.switchMap(gameIdLiveData) { gameId ->
+            gameRepository.getGame(gameId)
+        }
+    fun loadGame(gameId: UUID) {
+        Log.d("FRAGMENT_MAIN", gameId.toString())
+        gameIdLiveData.value = gameId
+    }
     var score1 = 0
     var score2 = 0
     var team1 = "Team 1"

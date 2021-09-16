@@ -10,6 +10,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
+import android.widget.Toast.LENGTH_SHORT
+import androidx.lifecycle.Observer
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -37,8 +40,8 @@ private const val ARG_GAME_ID = "game_id"
 
 class GameFragment : Fragment() {
     private lateinit var game: Game
-    private val mainViewModel: MainViewModel by lazy {
-        ViewModelProvider(this).get(MainViewModel::class.java)
+    private val gameViewModel: GameFragmentViewModel by lazy {
+        ViewModelProvider(this).get(GameFragmentViewModel::class.java)
     }
     private var mp: MediaPlayer? = null
 
@@ -57,17 +60,17 @@ class GameFragment : Fragment() {
             gameId = UUID.randomUUID()
         Log.d(TAG, "Args bundle game ID = $gameId")
         //TODO: Load crime from database.
-
+        gameViewModel.loadGame(gameId)
         arguments?.let {
             param1 = it.getInt(SCORE1)
             param2 = it.getInt(SCORE2)
             param3 = it.getString(TEAM1)
             param4 = it.getString(TEAM2)
         }
-        mainViewModel.score1 = savedInstanceState?.getInt(SCORE1, 0) ?: 0
-        mainViewModel.score2 = savedInstanceState?.getInt(SCORE2, 0) ?: 0
-        mainViewModel.team1 = savedInstanceState?.getString(TEAM1, "Team 1") ?: "Team 1"
-        mainViewModel.team2 = savedInstanceState?.getString(TEAM2, "Team 2") ?: "Team 2"
+        gameViewModel.score1 = savedInstanceState?.getInt(SCORE1, 0) ?: 0
+        gameViewModel.score2 = savedInstanceState?.getInt(SCORE2, 0) ?: 0
+        gameViewModel.team1 = savedInstanceState?.getString(TEAM1, "Team 1") ?: "Team 1"
+        gameViewModel.team2 = savedInstanceState?.getString(TEAM2, "Team 2") ?: "Team 2"
         Log.d(TAG, "onCreate Called")
     }
 
@@ -101,7 +104,7 @@ class GameFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                mainViewModel.team1 = team1Name.text.toString()
+                gameViewModel.team1 = team1Name.text.toString()
             }
         })
         team2Name.addTextChangedListener(object : TextWatcher {
@@ -112,48 +115,49 @@ class GameFragment : Fragment() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                mainViewModel.team2 = team2Name.text.toString()
+                gameViewModel.team2 = team2Name.text.toString()
             }
 
         })
         threeTeam1.setOnClickListener {
-            mainViewModel.threeTeam1()
+            gameViewModel.threeTeam1()
             playTriple()
-            displayScore1(mainViewModel.score1)
+            displayScore1(gameViewModel.score1)
         }
         twoTeam1.setOnClickListener {
-            mainViewModel.twoTeam1()
+            gameViewModel.twoTeam1()
             playDouble()
-            displayScore1(mainViewModel.score1)
+            displayScore1(gameViewModel.score1)
 
         }
         oneTeam1.setOnClickListener {
-            mainViewModel.oneTeam1()
+            gameViewModel.oneTeam1()
             playSingle()
-            displayScore1(mainViewModel.score1)
+            displayScore1(gameViewModel.score1)
         }
         threeTeam2.setOnClickListener {
-            mainViewModel.threeTeam2()
+            gameViewModel.threeTeam2()
             playTriple()
-            displayScore2(mainViewModel.score2)
+            displayScore2(gameViewModel.score2)
 
         }
         twoTeam2.setOnClickListener {
-            mainViewModel.twoTeam2()
+            gameViewModel.twoTeam2()
             playDouble()
-            displayScore2(mainViewModel.score2)
+            displayScore2(gameViewModel.score2)
         }
         oneTeam2.setOnClickListener {
-            mainViewModel.oneTeam2()
+            gameViewModel.oneTeam2()
             playSingle()
-            displayScore2(mainViewModel.score2)
+            displayScore2(gameViewModel.score2)
         }
 
         resetButton.setOnClickListener {
-            mainViewModel.resetScore()
-            displayScore1(mainViewModel.score1)
-            displayScore2(mainViewModel.score2)
+            gameViewModel.resetScore()
+            displayScore1(gameViewModel.score1)
+            displayScore2(gameViewModel.score2)
             displayTeamNames("Team 1", "Team 2")
+
         }
         saveButton.setOnClickListener {
             //TODO: Write code to inflate second view with intents and such.
@@ -167,9 +171,33 @@ class GameFragment : Fragment() {
             ft.addToBackStack(null)
             ft.commit()
         }
-        displayScore1(mainViewModel.score1)
-        displayScore2(mainViewModel.score2)
-        displayTeamNames(mainViewModel.team1, mainViewModel.team2)
+        gameViewModel.gameLiveData.observe(
+            viewLifecycleOwner,
+            Observer { game ->
+                game?.let {
+                    Toast.makeText(context?.applicationContext, "Editing entry!", LENGTH_LONG).show()
+                    this.game = game
+                    /*Log.d(TAG,"teamAScore = "+this.game.teamAScore)
+                    Log.d(TAG,"teamBScore = "+this.game.teamBScore)
+                    Log.d(TAG,"teamAName = "+this.game.teamAName)
+                    Log.d(TAG,"teamBName = "+this.game.teamBName)*/
+                    gameViewModel.score1 = this.game.teamAScore
+                    gameViewModel.score2 = this.game.teamBScore
+                    gameViewModel.team1 = this.game.teamAName
+                    gameViewModel.team2 = this.game.teamBName
+                    displayScore1(gameViewModel.score1)
+                    displayScore2(gameViewModel.score2)
+                    displayTeamNames(gameViewModel.team1, gameViewModel.team2)
+                }
+            }
+        )
+        displayScore1(gameViewModel.score1)
+        displayScore2(gameViewModel.score2)
+        displayTeamNames(gameViewModel.team1, gameViewModel.team2)
+    }
+
+    private fun updateUI() {
+        TODO("Not yet implemented")
     }
 
     private fun displayScore1(score: Int) {
@@ -235,10 +263,10 @@ class GameFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         Log.d(TAG, "onSaveInstanceState")
-        outState.putInt(SCORE1, mainViewModel.score1)
-        outState.putInt(SCORE2, mainViewModel.score2)
-        outState.putString(TEAM1, mainViewModel.team1)
-        outState.putString(TEAM2, mainViewModel.team2)
+        outState.putInt(SCORE1, gameViewModel.score1)
+        outState.putInt(SCORE2, gameViewModel.score2)
+        outState.putString(TEAM1, gameViewModel.team1)
+        outState.putString(TEAM2, gameViewModel.team2)
     }
 
     @Override

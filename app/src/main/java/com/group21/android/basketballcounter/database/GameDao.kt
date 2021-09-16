@@ -10,7 +10,7 @@ interface GameDao {
     @Query("SELECT * FROM game")
     fun getAll(): LiveData<List<Game>>
 
-    @Query("SELECT * FROM game where id LIKE (:id)")
+    @Query("SELECT * FROM game where id LIKE :id")
     fun findByID(id : UUID): LiveData<Game>
 
     @Insert
