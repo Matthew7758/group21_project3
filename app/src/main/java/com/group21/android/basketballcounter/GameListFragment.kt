@@ -1,5 +1,6 @@
 package com.group21.android.basketballcounter
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,16 +12,28 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.util.*
 
 private const val TAG = "GameListFragment"
 
 class GameListFragment : Fragment() {
+
+    //Required interface for hosting activities
+    interface Callbacks {
+        fun onGameSelected(gameId: UUID)
+    }
+    private var callbacks : Callbacks? = null
 
     private lateinit var gameRecyclerView: RecyclerView
     private var adapter: GameAdapter? = GameAdapter(emptyList())
 
     private val gameListViewModel: GameListViewModel by lazy {
         ViewModelProviders.of(this).get(GameListViewModel::class.java)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        callbacks = context as Callbacks?
     }
 
     override fun onCreateView(
@@ -50,16 +63,42 @@ class GameListFragment : Fragment() {
             })
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        callbacks = null
+    }
+
     private fun updateUI(games: List<Game>) {
         adapter = GameAdapter(games)
         gameRecyclerView.adapter = adapter
     }
 
-    private inner class GameHolder(view: View) : RecyclerView.ViewHolder(view) {
+    private inner class GameHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+        private lateinit var game: Game
         val dateTextView: TextView = itemView.findViewById(R.id.game_date)
         val teamsTextView: TextView = itemView.findViewById(R.id.team_titles)
         val teamScores: TextView = itemView.findViewById(R.id.team_scores)
         val teamImage: ImageView = itemView.findViewById(R.id.teamImage)
+        init {
+            itemView.setOnClickListener(this)
+        }
+        fun bind(game: Game) {
+            this.game = game
+            dateTextView.text = this.game.date.toString()
+            teamsTextView.text = "Team ".plus(this.game.teamAName).plus(":Team ").plus(this.game.teamBName)
+            teamScores.text = String.format("%d", game.teamAScore).plus(":").plus(String.format("%d", game.teamBScore))
+            if (this.game.teamAScore > this.game.teamBScore) {
+                teamImage.setImageResource(R.drawable.vinnypog)
+            } else {
+                teamImage.setImageResource(R.drawable.vandarkholme)
+            }
+
+        }
+
+        override fun onClick(v: View?) {
+            callbacks?.onGameSelected(game.id)
+        }
+
     }
 
     private inner class GameAdapter(var games: List<Game>) : RecyclerView.Adapter<GameHolder>() {
@@ -73,18 +112,7 @@ class GameListFragment : Fragment() {
         override fun getItemCount() = games.size
         override fun onBindViewHolder(holder: GameHolder, position: Int) {
             val game = games[position]
-            holder.apply {
-                dateTextView.text = game.date.toString()
-                teamsTextView.text =
-                    "Team ".plus(game.teamAName).plus(":Team ").plus(game.teamBName)
-                teamScores.text = String.format("%d", game.teamAScore).plus(":")
-                    .plus(String.format("%d", game.teamBScore))
-                if (game.teamAScore > game.teamBScore) {
-                    teamImage.setImageResource(R.drawable.vinnypog)
-                } else {
-                    teamImage.setImageResource(R.drawable.vandarkholme)
-                }
-            }
+            holder.bind(game)
         }
     }
 

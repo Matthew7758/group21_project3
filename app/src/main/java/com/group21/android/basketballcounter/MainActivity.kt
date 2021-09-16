@@ -3,11 +3,12 @@ package com.group21.android.basketballcounter
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import java.util.*
 
 
 private const val TAG = "MainActivity"
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), GameListFragment.Callbacks {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -15,7 +16,7 @@ class MainActivity : AppCompatActivity() {
         //val fragment = GameListFragment.newInstance()
         val ft = supportFragmentManager.beginTransaction()
         Log.d("TEST", "BEGIN TRANSACTION SUCCEEDED")
-        ft.replace(R.id.fragment_placeholder, fragment_main())
+        ft.replace(R.id.fragment_placeholder, GameFragment())
         Log.d("TEST", "FRAGMENT REPLACE SUCCEEDED")
         ft.commit()
         Log.d("TEST", "FRAGMENT COMMIT SUCCEEDED")
@@ -23,6 +24,12 @@ class MainActivity : AppCompatActivity() {
         /*val ft = supportFragmentManager.beginTransaction()
         ft.replace(R.id.fragment_placeholder, fragment)
         ft.commit()*/
+    }
+
+    override fun onGameSelected(gameId: UUID) {
+        Log.d(TAG, "MainActivity.onGameSelected: $gameId")
+        val fragment = GameFragment.newInstance(gameId)
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_placeholder, fragment).addToBackStack(null).commit()
     }
 
 

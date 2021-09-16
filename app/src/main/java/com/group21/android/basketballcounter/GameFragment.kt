@@ -13,9 +13,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.fragment_main.*
-
-
+import kotlinx.android.synthetic.main.game_fragment.*
+import java.util.*
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -31,10 +30,13 @@ private const val TEAM2 = "team2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [fragment_main.newInstance] factory method to
+ * Use the [GameFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class fragment_main : Fragment() {
+private const val ARG_GAME_ID = "game_id"
+
+class GameFragment : Fragment() {
+    private lateinit var game: Game
     private val mainViewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
     }
@@ -48,6 +50,14 @@ class fragment_main : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val gameId : UUID
+        if(arguments?.getSerializable(ARG_GAME_ID) != null)
+            gameId = arguments?.getSerializable(ARG_GAME_ID) as UUID
+        else
+            gameId = UUID.randomUUID()
+        Log.d(TAG, "Args bundle game ID = $gameId")
+        //TODO: Load crime from database.
+
         arguments?.let {
             param1 = it.getInt(SCORE1)
             param2 = it.getInt(SCORE2)
@@ -61,32 +71,24 @@ class fragment_main : Fragment() {
         Log.d(TAG, "onCreate Called")
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false)
+        return inflater.inflate(R.layout.game_fragment, container, false)
     }
 
     companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment fragment_main.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            fragment_main().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        fun newInstance(gameId: UUID): GameFragment {
+            val args = Bundle().apply {
+                putSerializable(ARG_GAME_ID, gameId)
             }
+            return GameFragment().apply {
+                arguments = args
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

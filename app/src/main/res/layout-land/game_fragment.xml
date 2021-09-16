@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment_main">
+    tools:context=".GameFragment">
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +36,6 @@
                         android:singleLine="true"
                         android:fontFamily="sans-serif-black"
                         android:gravity="center"
-                        android:maxLength="6"
                         android:text="@string/team1Name"
                         android:textAlignment="center"
                         android:textSize="16sp" />
@@ -70,7 +69,6 @@
                         android:singleLine="true"
                         android:fontFamily="sans-serif-black"
                         android:gravity="center"
-                        android:maxLength="6"
                         android:id="@+id/team2Name"
                         android:text="@string/team2Name"
                         android:textAlignment="center"
