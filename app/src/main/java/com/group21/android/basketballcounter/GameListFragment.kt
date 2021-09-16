@@ -69,9 +69,9 @@ class GameListFragment : Fragment() {
             val game = games[position]
             holder.apply {
                 dateTextView.text = game.date.toString()
-                teamsTextView.text = "Team ".plus(game.team1Name).plus(":Team ").plus(game.team2Name)
-                teamScores.text = String.format("%d", game.team1Score).plus(":").plus(String.format("%d", game.team2Score))
-                if(game.team1Score > game.team2Score) {
+                teamsTextView.text = "Team ".plus(game.teamAName).plus(":Team ").plus(game.teamBName)
+                teamScores.text = String.format("%d", game.teamAScore).plus(":").plus(String.format("%d", game.teamBScore))
+                if(game.teamAScore > game.teamBScore) {
                     teamImage.setImageResource(R.drawable.vinnypog)
                 }
                 else {

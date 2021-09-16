@@ -1,17 +1,20 @@
 package com.group21.android.basketballcounter
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.util.*
 
 /**
  * data class for a basketball game
  */
-data class Game(val id: UUID = UUID.randomUUID(),
-                var team1Name: String = "",
-                var team2Name: String = "",
-                var team1Score: Int = 0,
-                var team2Score: Int = 0,
-                var index: Int = -1,
-                var date: Date = Date(),) {
-
-
-}
+@Entity
+data class Game(
+    @PrimaryKey(autoGenerate = true)
+    val id: UUID,
+    @ColumnInfo(name = "teamAName") var teamAName: String,
+    @ColumnInfo(name = "teamBName") var teamBName: String,
+    @ColumnInfo(name = "teamAScore") var teamAScore: Int,
+    @ColumnInfo(name = "teamBScore") var teamBScore: Int,
+    @ColumnInfo(name = "date") var date: Int
+)
