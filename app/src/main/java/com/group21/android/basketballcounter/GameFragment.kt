@@ -21,8 +21,6 @@ import kotlin.random.Random
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 private const val TAG = "FRAGMENT_MAIN"
 private const val SCORE1 = "score1"
@@ -36,6 +34,7 @@ private const val TEAM2 = "team2"
  * create an instance of this fragment.
  */
 private const val ARG_GAME_ID = "game_id"
+private var savePressed = false
 
 class GameFragment : Fragment() {
     private lateinit var game: Game
@@ -58,7 +57,6 @@ class GameFragment : Fragment() {
         else
             gameId = UUID.randomUUID()
         Log.d(TAG, "Args bundle game ID = $gameId")
-        //TODO: Load crime from database.
         gameViewModel.loadGame(gameId)
         arguments?.let {
             param1 = it.getInt(SCORE1)
@@ -169,10 +167,7 @@ class GameFragment : Fragment() {
                 var game = Game(UUID.randomUUID(), getRandomString(6), getRandomString(6), Random.nextInt(0,100), Random.nextInt(0,100), Date())
                 gameViewModel.insertGame(game)
             }*/
-            val intent = Intent(activity, Main2Activity::class.java)
-            startActivityForResult(intent, 1)
-        }
-        displayButton.setOnClickListener {
+            savePressed = true
             if (gameViewModel.gameLiveData.value != null) {
                 Log.d(TAG, "Saving new game in onStop()")
                 game = Game(
@@ -194,14 +189,18 @@ class GameFragment : Fragment() {
                     Date()
                 )
                 gameViewModel.insertGame(game)
+                Toast.makeText(context?.applicationContext, "Game Saved!", LENGTH_SHORT).show()
             } else {
                 Toast.makeText(
                     context?.applicationContext,
-                    "At least one score must be > 0 to save implicitly!",
+                    "At least one score must be > 0 to save explicitly!",
                     LENGTH_SHORT
                 ).show()
             }
-
+            val intent = Intent(activity, Main2Activity::class.java)
+            startActivityForResult(intent, 1)
+        }
+        displayButton.setOnClickListener {
             val nextFrag = GameListFragment.newInstance()
             val ft = requireActivity().supportFragmentManager.beginTransaction()
             ft.replace(((view as ViewGroup).parent as View).id, nextFrag)
@@ -325,6 +324,46 @@ class GameFragment : Fragment() {
                 Toast.makeText(activity, "Unpog.", Toast.LENGTH_SHORT).show()
             }
         }
+        savePressed = false
+        val gameId = UUID.randomUUID()
+        gameViewModel.loadGame(gameId)
+        gameViewModel.resetScore()
+        displayScore1(gameViewModel.score1)
+        displayScore2(gameViewModel.score2)
+        displayTeamNames("Team 1", "Team 2")
     }
 
+    override fun onStop() {
+        super.onStop()
+        if(!savePressed) {
+            if (gameViewModel.gameLiveData.value != null) {
+                Log.d(TAG, "Saving new game in onStop()")
+                game = Game(
+                    game.id,
+                    gameViewModel.team1,
+                    gameViewModel.team2,
+                    gameViewModel.score1,
+                    gameViewModel.score2,
+                    Date()
+                )
+                gameViewModel.saveGame(game)
+            } else if (gameViewModel.score1 != 0 && gameViewModel.score2 != 0) {
+                game = Game(
+                    UUID.randomUUID(),
+                    gameViewModel.team1,
+                    gameViewModel.team2,
+                    gameViewModel.score1,
+                    gameViewModel.score2,
+                    Date()
+                )
+                gameViewModel.insertGame(game)
+            } else {
+                Toast.makeText(
+                    context?.applicationContext,
+                    "At least one score must be > 0 to save implicitly!",
+                    LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
 }
