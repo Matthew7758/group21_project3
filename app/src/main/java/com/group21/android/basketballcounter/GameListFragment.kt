@@ -23,7 +23,8 @@ class GameListFragment : Fragment() {
     interface Callbacks {
         fun onGameSelected(gameId: UUID)
     }
-    private var callbacks : Callbacks? = null
+
+    private var callbacks: Callbacks? = null
 
     private lateinit var gameRecyclerView: RecyclerView
     private var adapter: GameAdapter? = GameAdapter(emptyList())
@@ -62,8 +63,21 @@ class GameListFragment : Fragment() {
             viewLifecycleOwner,
             { games ->
                 games?.let {
+                    var gamesList : MutableList<Game> = mutableListOf()
+                    for (game : Game in games) {
+                        if (GAME_STATUS == "T")
+                            gamesList.add(game)
+                        else if (GAME_STATUS == "A") {
+                            if (game.teamAScore > game.teamBScore)
+                                gamesList.add(game)
+                        } else if (GAME_STATUS == "B") {
+                            if (game.teamBScore > game.teamAScore)
+                                gamesList.add(game)
+                        }
+                    }
                     Log.i(TAG, "Got games ${games.size}")
-                    updateUI(games)
+                    Log.i(TAG, "Loading games ${gamesList.size}")
+                    updateUI(gamesList)
                 }
             })
     }
@@ -78,20 +92,25 @@ class GameListFragment : Fragment() {
         gameRecyclerView.adapter = adapter
     }
 
-    private inner class GameHolder(view: View) : RecyclerView.ViewHolder(view), View.OnClickListener {
+    private inner class GameHolder(view: View) : RecyclerView.ViewHolder(view),
+        View.OnClickListener {
         private lateinit var game: Game
         val dateTextView: TextView = itemView.findViewById(R.id.game_date)
         val teamsTextView: TextView = itemView.findViewById(R.id.team_titles)
         val teamScores: TextView = itemView.findViewById(R.id.team_scores)
         val teamImage: ImageView = itemView.findViewById(R.id.teamImage)
+
         init {
             itemView.setOnClickListener(this)
         }
+
         fun bind(game: Game) {
             this.game = game
             dateTextView.text = this.game.date.toString()
-            teamsTextView.text = "Team ".plus(this.game.teamAName).plus(":Team ").plus(this.game.teamBName)
-            teamScores.text = String.format("%d", game.teamAScore).plus(":").plus(String.format("%d", game.teamBScore))
+            teamsTextView.text =
+                "Team ".plus(this.game.teamAName).plus(":Team ").plus(this.game.teamBName)
+            teamScores.text = String.format("%d", game.teamAScore).plus(":")
+                .plus(String.format("%d", game.teamBScore))
             if (this.game.teamAScore > this.game.teamBScore) {
                 teamImage.setImageResource(R.drawable.vinnypog)
             } else {
@@ -117,16 +136,9 @@ class GameListFragment : Fragment() {
         override fun getItemCount() = games.size
         override fun onBindViewHolder(holder: GameHolder, position: Int) {
             val game = games[position]
-            if(GAME_STATUS == "T")
-                holder.bind(game)
-            else if(GAME_STATUS == "A") {
-                if(game.teamAScore > game.teamBScore)
-                    holder.bind(game)
-            }
-            else if(GAME_STATUS == "B") {
-                if(game.teamBScore > game.teamAScore)
-                    holder.bind(game)
-            }
+            //Log.d(TAG, "gameID Upon Binding = ${game.id}")
+            holder.bind(game)
+
         }
     }
 

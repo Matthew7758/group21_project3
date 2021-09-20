@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.game_fragment.*
 import java.util.*
+import kotlin.random.Random
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -156,7 +157,7 @@ class GameFragment : Fragment() {
 
         }
         saveButton.setOnClickListener {
-            /*fun getRandomString(length: Int): String {
+            fun getRandomString(length: Int): String {
                 val charset = "ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz0123456789"
                 return (1..length)
                     .map { charset.random() }
@@ -165,7 +166,7 @@ class GameFragment : Fragment() {
             for(i in 0 until 150) {
                 var game = Game(UUID.randomUUID(), getRandomString(6), getRandomString(6), Random.nextInt(0,100), Random.nextInt(0,100), Date())
                 gameViewModel.insertGame(game)
-            }*/
+            }
             savePressed = true
             if (gameViewModel.gameLiveData.value != null) {
                 Log.d(TAG, "Saving new game in onStop()")
