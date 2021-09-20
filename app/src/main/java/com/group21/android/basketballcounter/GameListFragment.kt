@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 
 private const val TAG = "GameListFragment"
+private var GAME_STATUS = ""
 
 class GameListFragment : Fragment() {
 
@@ -33,6 +34,10 @@ class GameListFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        arguments?.getString("GameStatus")?.let {
+            GAME_STATUS = it
+        }
+        Log.d(TAG, "GameStatus = $GAME_STATUS")
         callbacks = context as Callbacks?
     }
 
@@ -117,12 +122,14 @@ class GameListFragment : Fragment() {
     }
 
 
-    companion object {
-        fun newInstance(): GameListFragment {
-            Log.d(TAG, "newInstance Entered")
-            return GameListFragment()
+    companion object { //Part 6
+        fun newInstance(gameStatus: String): GameListFragment {
+            val args = Bundle().apply {
+                putString("GameStatus", gameStatus)
+            }
+            return GameListFragment().apply {
+                arguments = args
+            }
         }
     }
-
-
 }

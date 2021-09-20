@@ -17,7 +17,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.game_fragment.*
 import java.util.*
-import kotlin.random.Random
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -179,7 +178,7 @@ class GameFragment : Fragment() {
                     Date()
                 )
                 gameViewModel.saveGame(game)
-            } else if (gameViewModel.score1 != 0 && gameViewModel.score2 != 0) {
+            } else if (gameViewModel.score1 != 0 || gameViewModel.score2 != 0) {
                 game = Game(
                     UUID.randomUUID(),
                     gameViewModel.team1,
@@ -200,8 +199,15 @@ class GameFragment : Fragment() {
             val intent = Intent(activity, Main2Activity::class.java)
             startActivityForResult(intent, 1)
         }
+        //Part 6
         displayButton.setOnClickListener {
-            val nextFrag = GameListFragment.newInstance()
+            var status = "T"
+            if(gameViewModel.score1 > gameViewModel.score2)
+                status = "A"
+            else if (gameViewModel.score2 > gameViewModel.score1)
+                status = "B"
+            Log.d(TAG,"GameStatus = $status")
+            val nextFrag = GameListFragment.newInstance(status)
             val ft = requireActivity().supportFragmentManager.beginTransaction()
             ft.replace(((view as ViewGroup).parent as View).id, nextFrag)
             ft.addToBackStack(null)
@@ -347,7 +353,7 @@ class GameFragment : Fragment() {
                     Date()
                 )
                 gameViewModel.saveGame(game)
-            } else if (gameViewModel.score1 != 0 && gameViewModel.score2 != 0) {
+            } else if (gameViewModel.score1 != 0 || gameViewModel.score2 != 0) {
                 game = Game(
                     UUID.randomUUID(),
                     gameViewModel.team1,
