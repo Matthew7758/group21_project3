@@ -117,7 +117,16 @@ class GameListFragment : Fragment() {
         override fun getItemCount() = games.size
         override fun onBindViewHolder(holder: GameHolder, position: Int) {
             val game = games[position]
-            holder.bind(game)
+            if(GAME_STATUS == "T")
+                holder.bind(game)
+            else if(GAME_STATUS == "A") {
+                if(game.teamAScore > game.teamBScore)
+                    holder.bind(game)
+            }
+            else if(GAME_STATUS == "B") {
+                if(game.teamBScore > game.teamAScore)
+                    holder.bind(game)
+            }
         }
     }
 
