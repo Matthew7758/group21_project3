@@ -173,7 +173,6 @@ class GameFragment : Fragment() {
             displayScore1(gameViewModel.score1)
             displayScore2(gameViewModel.score2)
             displayTeamNames("Team 1", "Team 2")
-
         }
         saveButton.setOnClickListener {
             /*fun getRandomString(length: Int): String {
@@ -245,6 +244,9 @@ class GameFragment : Fragment() {
                 isEnabled = false
             }
             setOnClickListener {
+                team1PhotoFile = File.createTempFile("tmp1", ".jpg")
+                team1PhotoUri = FileProvider.getUriForFile(requireActivity(), "com.group21.android.basketballcounter.fileprovider", team1PhotoFile!!)
+
                 captureImage.putExtra(MediaStore.EXTRA_OUTPUT, team1PhotoUri)
                 val cameraActivities: List<ResolveInfo> = packageManager.queryIntentActivities(captureImage,PackageManager.MATCH_DEFAULT_ONLY)
                 for (cameraActivity in cameraActivities) {
@@ -261,6 +263,9 @@ class GameFragment : Fragment() {
                 isEnabled = false
             }
             setOnClickListener {
+                team2PhotoFile = File.createTempFile("tmp2", ".jpg")
+                team2PhotoUri = FileProvider.getUriForFile(requireActivity(), "com.group21.android.basketballcounter.fileprovider", team2PhotoFile!!)
+
                 captureImage.putExtra(MediaStore.EXTRA_OUTPUT, team2PhotoUri)
                 val cameraActivities: List<ResolveInfo> = packageManager.queryIntentActivities(captureImage,PackageManager.MATCH_DEFAULT_ONLY)
                 for (cameraActivity in cameraActivities) {
