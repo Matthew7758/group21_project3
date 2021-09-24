@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".GameFragment">
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,13 +33,28 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:ems="12"
-                        android:singleLine="true"
                         android:fontFamily="sans-serif-black"
                         android:gravity="center"
+                        android:singleLine="true"
                         android:text="@string/team1Name"
                         android:textAlignment="center"
                         android:textSize="16sp" />
                 </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/team1Image"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:contentDescription="@string/team1Name"
+                    android:src="@drawable/ic_baseline_image_24" />
+
+                <ImageButton
+                    android:id="@+id/team1ImageBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:src="@drawable/ic_baseline_camera_24"
+                    tools:ignore="SpeakableTextPresentCheck" />
 
                 <TextView
                     android:id="@+id/team1Score"
@@ -101,13 +117,28 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:ems="12"
-                        android:singleLine="true"
                         android:fontFamily="sans-serif-black"
                         android:gravity="center"
+                        android:singleLine="true"
                         android:text="@string/team2Name"
                         android:textAlignment="center"
                         android:textSize="16sp" />
                 </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/team2Image"
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:contentDescription="@string/team1Name"
+                    android:src="@drawable/ic_baseline_image_24" />
+
+                <ImageButton
+                    android:id="@+id/team2ImageBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="48dp"
+                    android:src="@drawable/ic_baseline_camera_24"
+                    tools:ignore="SpeakableTextPresentCheck" />
 
                 <TextView
                     android:id="@+id/team2Score"

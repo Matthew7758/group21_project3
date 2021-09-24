@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import android.util.Log
+import java.io.File
 import java.util.*
 
 private const val TAG = "FRAGMENT_MAIN"
@@ -29,6 +30,12 @@ class GameFragmentViewModel : ViewModel() {
         Log.d("FRAGMENT_MAIN", "Inserting new game")
         Log.d(TAG, "Game = $game")
         gameRepository.addGame(game)
+    }
+    fun getPhoto1File(game: Game): File {
+        return gameRepository.getPhoto1File(game)
+    }
+    fun getPhoto2File(game: Game): File {
+        return gameRepository.getPhoto2File(game)
     }
     var score1 = 0
     var score2 = 0

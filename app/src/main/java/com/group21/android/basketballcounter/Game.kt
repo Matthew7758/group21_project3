@@ -17,4 +17,7 @@ data class Game(
     @ColumnInfo(name = "teamAScore") val teamAScore: Int,
     @ColumnInfo(name = "teamBScore") val teamBScore: Int,
     @ColumnInfo(name = "date") val date: Date = Date()
-)
+) {
+    val team1PhotoFileName get() = "IMG1_$id.jpg"
+    val team2PhotoFileName get() = "IMG2_$id.jpg"
+}

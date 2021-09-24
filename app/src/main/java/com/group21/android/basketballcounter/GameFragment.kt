@@ -9,6 +9,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AppCompatActivity
@@ -38,6 +40,11 @@ private var savePressed = false
 
 class GameFragment : Fragment() {
     private lateinit var game: Game
+    private lateinit var team1PhotoBtn : ImageButton
+    private lateinit var team2PhotoBtn : ImageButton
+    private lateinit var team1PhotoView : ImageView
+    private lateinit var team2PhotoView : ImageView
+
     private val gameViewModel: GameFragmentViewModel by lazy {
         ViewModelProvider(this).get(GameFragmentViewModel::class.java)
     }
@@ -214,6 +221,10 @@ class GameFragment : Fragment() {
             ft.addToBackStack(null)
             ft.commit()
         }
+        team1PhotoBtn = view.findViewById(R.id.team1ImageBtn) as ImageButton
+        team1PhotoView = view.findViewById(R.id.team1Image) as ImageView
+        team2PhotoBtn = view.findViewById(R.id.team2ImageBtn) as ImageButton
+        team2PhotoView = view.findViewById(R.id.team2Image) as ImageView
         gameViewModel.gameLiveData.observe(
             viewLifecycleOwner,
             Observer { game ->
