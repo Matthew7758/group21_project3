@@ -244,7 +244,8 @@ class GameFragment : Fragment() {
                 isEnabled = false
             }
             setOnClickListener {
-                team1PhotoFile = File.createTempFile("tmp1", ".jpg")
+                var outputDir: File = context.filesDir
+                team1PhotoFile = File.createTempFile("tmp1", ".jpg", outputDir)
                 team1PhotoUri = FileProvider.getUriForFile(requireActivity(), "com.group21.android.basketballcounter.fileprovider", team1PhotoFile!!)
 
                 captureImage.putExtra(MediaStore.EXTRA_OUTPUT, team1PhotoUri)
@@ -263,7 +264,8 @@ class GameFragment : Fragment() {
                 isEnabled = false
             }
             setOnClickListener {
-                team2PhotoFile = File.createTempFile("tmp2", ".jpg")
+                var outputDir: File = context.filesDir
+                team2PhotoFile = File.createTempFile("tmp2", ".jpg", outputDir)
                 team2PhotoUri = FileProvider.getUriForFile(requireActivity(), "com.group21.android.basketballcounter.fileprovider", team2PhotoFile!!)
 
                 captureImage.putExtra(MediaStore.EXTRA_OUTPUT, team2PhotoUri)
