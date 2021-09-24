@@ -43,8 +43,9 @@
 
                 <ImageView
                     android:id="@+id/team1Image"
-                    android:layout_width="match_parent"
+                    android:layout_width="100dp"
                     android:layout_height="100dp"
+                    android:layout_gravity="center"
                     android:contentDescription="@string/team1Name"
                     android:src="@drawable/ic_baseline_image_24" />
 
@@ -127,8 +128,9 @@
 
                 <ImageView
                     android:id="@+id/team2Image"
-                    android:layout_width="match_parent"
+                    android:layout_width="100dp"
                     android:layout_height="100dp"
+                    android:layout_gravity="center"
                     android:contentDescription="@string/team1Name"
                     android:src="@drawable/ic_baseline_image_24" />
 
