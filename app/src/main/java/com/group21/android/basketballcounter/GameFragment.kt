@@ -1,8 +1,12 @@
 package com.group21.android.basketballcounter
 
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
@@ -14,10 +18,12 @@ import android.widget.ImageView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.game_fragment.*
+import java.io.File
 import java.util.*
 import kotlin.random.Random
 
@@ -29,6 +35,8 @@ private const val SCORE1 = "score1"
 private const val SCORE2 = "score2"
 private const val TEAM1 = "team1"
 private const val TEAM2 = "team2"
+private const val REQUEST_PHOTO1 = 6
+private const val REQUEST_PHOTO2 = 7
 
 /**
  * A simple [Fragment] subclass.
@@ -44,6 +52,10 @@ class GameFragment : Fragment() {
     private lateinit var team2PhotoBtn : ImageButton
     private lateinit var team1PhotoView : ImageView
     private lateinit var team2PhotoView : ImageView
+    private var team1PhotoFile : File? = null
+    private var team2PhotoFile : File? = null
+    private var team1PhotoUri : Uri = Uri.EMPTY
+    private var team2PhotoUri : Uri = Uri.EMPTY
 
     private val gameViewModel: GameFragmentViewModel by lazy {
         ViewModelProvider(this).get(GameFragmentViewModel::class.java)
@@ -225,6 +237,38 @@ class GameFragment : Fragment() {
         team1PhotoView = view.findViewById(R.id.team1Image) as ImageView
         team2PhotoBtn = view.findViewById(R.id.team2ImageBtn) as ImageButton
         team2PhotoView = view.findViewById(R.id.team2Image) as ImageView
+        team1PhotoBtn.apply {
+            val packageManager: PackageManager = requireActivity().packageManager
+            val captureImage = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            val resolvedActivity: ResolveInfo? = packageManager.resolveActivity(captureImage, PackageManager.MATCH_DEFAULT_ONLY)
+            if(resolvedActivity == null) {
+                isEnabled = false
+            }
+            setOnClickListener {
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, team1PhotoUri)
+                val cameraActivities: List<ResolveInfo> = packageManager.queryIntentActivities(captureImage,PackageManager.MATCH_DEFAULT_ONLY)
+                for (cameraActivity in cameraActivities) {
+                    requireActivity().grantUriPermission(cameraActivity.activityInfo.packageName,team1PhotoUri,Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                }
+                startActivityForResult(captureImage, REQUEST_PHOTO1)
+            }
+        }
+        team2PhotoBtn.apply {
+            val packageManager: PackageManager = requireActivity().packageManager
+            val captureImage = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            val resolvedActivity: ResolveInfo? = packageManager.resolveActivity(captureImage, PackageManager.MATCH_DEFAULT_ONLY)
+            if(resolvedActivity == null) {
+                isEnabled = false
+            }
+            setOnClickListener {
+                captureImage.putExtra(MediaStore.EXTRA_OUTPUT, team2PhotoUri)
+                val cameraActivities: List<ResolveInfo> = packageManager.queryIntentActivities(captureImage,PackageManager.MATCH_DEFAULT_ONLY)
+                for (cameraActivity in cameraActivities) {
+                    requireActivity().grantUriPermission(cameraActivity.activityInfo.packageName,team2PhotoUri,Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                }
+                startActivityForResult(captureImage, REQUEST_PHOTO2)
+            }
+        }
         gameViewModel.gameLiveData.observe(
             viewLifecycleOwner,
             Observer { game ->
@@ -232,6 +276,14 @@ class GameFragment : Fragment() {
                     Toast.makeText(context?.applicationContext, "Editing entry!", LENGTH_SHORT)
                         .show()
                     this.game = game
+                    team1PhotoFile = gameViewModel.getPhoto1File(game)
+                    team2PhotoFile = gameViewModel.getPhoto2File(game)
+                    team1PhotoUri = FileProvider.getUriForFile(requireActivity(),"com.group21.android.basketballcounter.fileprovider",
+                        team1PhotoFile!!
+                    )
+                    team2PhotoUri = FileProvider.getUriForFile(requireActivity(),"com.group21.android.basketballcounter.fileprovider",
+                        team2PhotoFile!!
+                    )
                     /*Log.d(TAG,"teamAScore = "+this.game.teamAScore)
                     Log.d(TAG,"teamBScore = "+this.game.teamBScore)
                     Log.d(TAG,"teamAName = "+this.game.teamAName)
@@ -249,10 +301,8 @@ class GameFragment : Fragment() {
         displayScore1(gameViewModel.score1)
         displayScore2(gameViewModel.score2)
         displayTeamNames(gameViewModel.team1, gameViewModel.team2)
-    }
-
-    private fun updateUI() {
-        TODO("Not yet implemented")
+        updatePhotoView1()
+        updatePhotoView2()
     }
 
     private fun displayScore1(score: Int) {
@@ -266,6 +316,30 @@ class GameFragment : Fragment() {
     private fun displayTeamNames(t1: String, t2: String) {
         team1Name.text = Editable.Factory.getInstance().newEditable(t1)
         team2Name.text = Editable.Factory.getInstance().newEditable(t2)
+    }
+
+    private fun updatePhotoView1() {
+        Log.d(TAG, "UpdatePhotoView1 Entered")
+
+        if(team1PhotoFile?.exists() == true) {
+            Log.d(TAG, "team1PhotoFile Exists")
+            val bitmap = getScaledBitmap(team1PhotoFile!!.path, requireActivity())
+            Log.d(TAG, "team1Photo Bitmap Created")
+            team1PhotoView.setImageBitmap(bitmap)
+        }
+        else {
+            team1PhotoView.setImageResource(R.drawable.ic_baseline_image_24)
+        }
+    }
+
+    private fun updatePhotoView2() {
+        if(team2PhotoFile?.exists() == true) {
+            val bitmap = getScaledBitmap(team2PhotoFile!!.path, requireActivity())
+            team2PhotoView.setImageBitmap(bitmap)
+        }
+        else {
+            team2PhotoView.setImageResource(R.drawable.ic_baseline_image_24)
+        }
     }
 
     fun stopSound() {
@@ -341,14 +415,24 @@ class GameFragment : Fragment() {
                 // Write your code if there's no result
                 Toast.makeText(activity, "Unpog.", Toast.LENGTH_SHORT).show()
             }
+            savePressed = false
+            val gameId = UUID.randomUUID()
+            gameViewModel.loadGame(gameId)
+            gameViewModel.resetScore()
+            displayScore1(gameViewModel.score1)
+            displayScore2(gameViewModel.score2)
+            displayTeamNames("Team 1", "Team 2")
         }
-        savePressed = false
-        val gameId = UUID.randomUUID()
-        gameViewModel.loadGame(gameId)
-        gameViewModel.resetScore()
-        displayScore1(gameViewModel.score1)
-        displayScore2(gameViewModel.score2)
-        displayTeamNames("Team 1", "Team 2")
+        if(requestCode == REQUEST_PHOTO1) {
+            Log.d(TAG, "REQUEST_PHOTO1 Returned")
+            Log.d(TAG, team1PhotoUri.toString())
+            requireActivity().revokeUriPermission(team1PhotoUri,Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            updatePhotoView1()
+        }
+        if(requestCode == REQUEST_PHOTO2) {
+            requireActivity().revokeUriPermission(team2PhotoUri,Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+            updatePhotoView2()
+        }
     }
 
     override fun onStop() {
@@ -383,5 +467,12 @@ class GameFragment : Fragment() {
                 ).show()
             }
         }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        Log.d(TAG, "onDetach Called")
+        requireActivity().revokeUriPermission(team1PhotoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+        requireActivity().revokeUriPermission(team2PhotoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
     }
 }
