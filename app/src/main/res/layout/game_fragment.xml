@@ -50,37 +50,57 @@
                     android:layout_marginStart="4dp"
 
                     >
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+                        <ImageView
+                            android:layout_gravity="center"
+                            android:id="@+id/team1Image"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:scaleType="centerCrop"
+                            android:contentDescription="@string/team1Name"
+                            android:src="@drawable/ic_baseline_image_24" />
 
-                    <ImageView
-                        android:id="@+id/team1Image"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:scaleType="centerCrop"
-                        android:contentDescription="@string/team1Name"
-                        android:src="@drawable/ic_baseline_image_24" />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <ImageButton
+                                android:id="@+id/team1ImageBtn"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"
+                                android:minHeight="48dp"
+                                android:src="@drawable/ic_baseline_camera_24"
+                                tools:ignore="SpeakableTextPresentCheck" />
+                            <ImageButton
+                                android:id="@+id/team1MicBtn"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"
+                                android:minHeight="48dp"
+                                android:src="@drawable/ic_baseline_keyboard_voice_24"
+                                tools:ignore="SpeakableTextPresentCheck"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <ImageButton
-                            android:id="@+id/team1ImageBtn"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:minHeight="48dp"
-                            android:src="@drawable/ic_baseline_camera_24"
-                            tools:ignore="SpeakableTextPresentCheck" />
 
                         <TextView
                             android:id="@+id/team1Score"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:fontFamily="sans-serif-light"
                             android:gravity="center"
                             android:text="@string/ZeroScore"
                             android:textColor="#000000"
-                            android:textSize="40sp" />
+                            android:textSize="60sp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -146,36 +166,61 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginBottom="20dp">
-                    <ImageView
-                        android:id="@+id/team2Image"
-                        android:layout_marginStart="4dp"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:scaleType="centerCrop"
-                        android:contentDescription="@string/team1Name"
-                        android:src="@drawable/ic_baseline_image_24" />
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginStart="4dp"
+
+                    >
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
-                        <ImageButton
-                            android:id="@+id/team2ImageBtn"
-                            android:layout_width="match_parent"
+                        <ImageView
+                            android:layout_gravity="center"
+                            android:id="@+id/team2Image"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:scaleType="centerCrop"
+                            android:contentDescription="@string/team1Name"
+                            android:src="@drawable/ic_baseline_image_24" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:minHeight="48dp"
-                            android:src="@drawable/ic_baseline_camera_24"
-                            tools:ignore="SpeakableTextPresentCheck" />
+                            android:orientation="horizontal">
+
+                            <ImageButton
+                                android:id="@+id/team2ImageBtn"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"
+                                android:minHeight="48dp"
+                                android:src="@drawable/ic_baseline_camera_24"
+                                tools:ignore="SpeakableTextPresentCheck" />
+                            <ImageButton
+                                android:id="@+id/team2MicBtn"
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"
+                                android:minHeight="48dp"
+                                android:src="@drawable/ic_baseline_keyboard_voice_24"
+                                tools:ignore="SpeakableTextPresentCheck"/>
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+
                         <TextView
                             android:id="@+id/team2Score"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:fontFamily="sans-serif-light"
                             android:gravity="center"
                             android:text="@string/ZeroScore"
                             android:textColor="#000000"
-                            android:textSize="40sp" />
+                            android:textSize="60sp" />
                     </LinearLayout>
 
                 </LinearLayout>
