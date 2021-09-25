@@ -330,8 +330,9 @@ class GameFragment : Fragment() {
 
         if(team1PhotoFile?.exists() == true) {
             Log.d(TAG, "team1PhotoFile Exists")
-            val bitmap = getScaledBitmap(team1PhotoFile!!.path, requireActivity())
+            var bitmap = getScaledBitmap(team1PhotoFile!!.path, requireActivity())
             Log.d(TAG, "team1Photo Bitmap Created")
+            bitmap = rotateImage(bitmap, team1PhotoFile!!.path)
             team1PhotoView.setImageBitmap(bitmap)
         }
         else {
@@ -341,7 +342,9 @@ class GameFragment : Fragment() {
 
     private fun updatePhotoView2() {
         if(team2PhotoFile?.exists() == true) {
-            val bitmap = getScaledBitmap(team2PhotoFile!!.path, requireActivity())
+            var bitmap = getScaledBitmap(team2PhotoFile!!.path, requireActivity())
+            bitmap = rotateImage(bitmap, team2PhotoFile!!.path)
+
             team2PhotoView.setImageBitmap(bitmap)
         }
         else {
