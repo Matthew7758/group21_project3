@@ -280,6 +280,16 @@
                 android:layout_height="wrap_content"
                 android:text="@string/display" />
         </LinearLayout>
+        <EditText
+            android:id="@+id/weather"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="12"
+            android:fontFamily="sans-serif-black"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="weather"
+            android:textSize="18sp" />
     </LinearLayout>
 
 </FrameLayout>

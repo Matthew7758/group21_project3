@@ -15,17 +15,26 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.group21.android.basketballcounter.api.WeatherApi
+import com.group21.android.basketballcounter.api.WeatherFetcher
+import com.group21.android.basketballcounter.api.WeatherItem
 import kotlinx.android.synthetic.main.game_fragment.*
+import retrofit2.*
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.File
+import java.math.RoundingMode
 import java.util.*
 import kotlin.random.Random
+import java.math.BigDecimal
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -68,8 +77,29 @@ class GameFragment : Fragment() {
     private var param3: String? = null
     private var param4: String? = null
 
+    private var weatherData: String? = null
+    private lateinit var weatherTextView: TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // below is Retrofit stuff
+
+        // api key: 070e9125904e852c760a223556296bd5
+        // endpoint: api.openweathermap.org
+
+        // for Second Part, use the below URL:
+        // api.openweathermap.org/data/2.5/weather?q=Worcester,us&APPID=070e9125904e852c760a223556296bd5
+
+        val weatherLiveData: LiveData<WeatherItem> = WeatherFetcher().fetchWeather()
+        weatherLiveData.observe(this, Observer {
+            //responseString -> Log.d(TAG, "Response recieved: $responseString")
+            weatherItem -> formatWeather(weatherItem)
+        })
+
+        // end of Retrofit stuff
+
+
         val gameId: UUID
         if (arguments?.getSerializable(ARG_GAME_ID) != null)
             gameId = arguments?.getSerializable(ARG_GAME_ID) as UUID
@@ -310,6 +340,13 @@ class GameFragment : Fragment() {
         displayTeamNames(gameViewModel.team1, gameViewModel.team2)
         updatePhotoView1()
         updatePhotoView2()
+        weatherTextView = view.findViewById(R.id.weather) as TextView
+    }
+
+    private fun formatWeather(weatherItem: WeatherItem) {
+        val tempInF = BigDecimal((weatherItem.temp - 273.15) * (9.0/5.0) + 32).setScale(2, RoundingMode.HALF_EVEN)
+
+        weatherTextView.text = weatherItem.city + ": " + tempInF.toString() + " Fahrenheit"
     }
 
     private fun displayScore1(score: Int) {

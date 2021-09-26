@@ -1,0 +1,45 @@
+2021-09-25 16:15:07.692 23688-23688/com.group21.android.basketballcounter D/FRAGMENT_MAIN: Response received: <!DOCTYPE html>
+    <html lang='en'>
+        <head>
+            <!-- smart banner apple -->
+            <meta name="apple-itunes-app" content="app-id=1535923697">
+            <script data-ad-client="ca-pub-6837309406068967" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+            <meta http-equiv="Content-Type" content="text/html; charset=utf-8">    
+        <meta  http-equiv=Expires content="Tue, Sep 20 2018 15:27:22 GMT">
+        <meta http-equiv="Last-Modified" content="Tue, Sep 20 2018 15:27:22 GMT">
+        <!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="keywords" content="weather, world, Openstreetmap, forecast, Openweather, current" >
+        <meta name="description" content="Get current weather, hourly forecast, daily forecast for 16 days, and 3-hourly forecast 5 days for your city. Historical weather data for 40 years back for any coordinate. Helpful stats, graphics, and this day in history charts are available for your reference. Interactive maps show precipitation, clouds, pressure, wind around your location." >
+        <meta name="author" content="OpenWeatherMap.org">
+        <meta name="domain" content="OpenWeatherMap.org" >        
+        <meta name="p:domain_verify" content="34fe229eab8562dca90f4a5962ff80a9"/>
+        <meta property="title" content="Сurrent weather and forecast" />                <link rel="shortcut icon" href="/themes/openweathermap/assets/vendor/owm/img/icons/favicon.ico" />
+    <link rel="icon" href="/themes/openweathermap/assets/vendor/owm/img/icons/logo_16x16.png" sizes="16x16" type="image/png">
+    <link rel="icon" href="/themes/openweathermap/assets/vendor/owm/img/icons/logo_32x32.png" sizes="32x32" type="image/png">
+    <link rel="icon" href="/themes/openweathermap/assets/vendor/owm/img/icons/logo_60x60.png" sizes="60x60" type="image/png">   
+            <title>Сurrent weather and forecast - OpenWeatherMap</title>
+            <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-31601618-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+    
+      gtag('config', 'UA-31601618-1');
+    </script>        
+            <script src="//code.jquery.com/jquery-1.9.1.min.js" integrity="sha256-wS9gmOZBqsqWxgIVgA8Y9WcQOa7PgSIX+rPA0VL2rbQ=" crossorigin="anonymous"></script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Array.from,Array.assign,fetch&flags=always,gated"></script>
+    <script src='/themes/openweathermap/assets/js/bundle_owm_preload.c31872127471c475ade1.js'></script>            
+            <link href='/themes/openweathermap/assets/css/bundle_owm_styles.c31872127471c475ade1.css' rel="stylesheet"> 
+    <link href='/themes/openweathermap/assets/css/stick_footer_panel.c31872127471c475ade1.css' rel="stylesheet">
+    <!-- Resources -->
+    <!--link href='/themes/openweathermap/assets/vendor/mosaic/fonts/font-awesome/css/font-awesome.min.css' rel="stylesheet"-->            
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Oswald:400,700,300' rel='stylesheet' rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,700,500,400italic,500italic' rel="stylesheet">        <link href='/themes/openweathermap/assets/css/new_owm_styles.835b0c2ecd513644.css' rel="stylesheet"> 
+    
+    <!-- Resources -->
+    <!--link href='/themes/openweathermap/assets/vendor/mosaic/fonts/font-awesome/css/font-awesome.min.css' rel="stylesheet"-->            
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href='https://fonts.googleapis.com/css?family=Os
