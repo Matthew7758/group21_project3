@@ -3,6 +3,7 @@ package com.group21.android.basketballcounter.api
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.group21.android.basketballcounter.cityName
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,7 +27,11 @@ class WeatherFetcher {
 
     fun fetchWeather(): LiveData<WeatherItem> {
         val responseLiveData: MutableLiveData<WeatherItem> = MutableLiveData()
-        val weatherRequest: Call<WeatherResponse> = weatherApi.fetchWeather()
+        if(cityName == null)
+        {
+            Log.e(TAG, "cityName is null!")
+        }
+        val weatherRequest: Call<WeatherResponse> = weatherApi.fetchWeather(cityName!!, "070e9125904e852c760a223556296bd5")
 
         weatherRequest.enqueue(object : Callback<WeatherResponse> {
             override fun onFailure(call: Call<WeatherResponse>, t: Throwable) {

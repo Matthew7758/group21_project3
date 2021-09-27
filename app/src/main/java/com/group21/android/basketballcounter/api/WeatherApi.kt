@@ -2,12 +2,13 @@ package com.group21.android.basketballcounter.api
 
 import retrofit2.http.GET
 import retrofit2.Call
+import retrofit2.http.Query
 
 interface WeatherApi {
     @GET(
-        "data/2.5/" +
-                "weather?q=Worcester,us" +
-                "&APPID=070e9125904e852c760a223556296bd5"
+        "data/2.5/weather?"
     )
-    fun fetchWeather(): Call<WeatherResponse>
+    fun fetchWeather(@Query("q") cityName: String, @Query("APPID") apikey: String): Call<WeatherResponse>
 }
+
+

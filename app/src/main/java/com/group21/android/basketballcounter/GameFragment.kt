@@ -1,11 +1,17 @@
 package com.group21.android.basketballcounter
 
+import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.os.Looper
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
@@ -19,11 +25,14 @@ import android.widget.TextView
 import android.widget.Toast
 import android.widget.Toast.LENGTH_SHORT
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.gms.location.*
 import com.group21.android.basketballcounter.api.WeatherApi
 import com.group21.android.basketballcounter.api.WeatherFetcher
 import com.group21.android.basketballcounter.api.WeatherItem
@@ -35,6 +44,10 @@ import java.math.RoundingMode
 import java.util.*
 import kotlin.random.Random
 import java.math.BigDecimal
+import com.google.android.gms.location.LocationServices
+
+
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -54,6 +67,8 @@ private const val REQUEST_PHOTO2 = 7
  */
 private const val ARG_GAME_ID = "game_id"
 private var savePressed = false
+
+var cityName: String? = null // public, so it can be accessed outside for the api call
 
 class GameFragment : Fragment() {
     private lateinit var game: Game
@@ -77,27 +92,19 @@ class GameFragment : Fragment() {
     private var param3: String? = null
     private var param4: String? = null
 
-    private var weatherData: String? = null
     private lateinit var weatherTextView: TextView
+
+    lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    lateinit var locationRequest: LocationRequest
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // below is Retrofit stuff
 
-        // api key: 070e9125904e852c760a223556296bd5
-        // endpoint: api.openweathermap.org
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient((activity as Context?)!!)
 
-        // for Second Part, use the below URL:
-        // api.openweathermap.org/data/2.5/weather?q=Worcester,us&APPID=070e9125904e852c760a223556296bd5
-
-        val weatherLiveData: LiveData<WeatherItem> = WeatherFetcher().fetchWeather()
-        weatherLiveData.observe(this, Observer {
-            //responseString -> Log.d(TAG, "Response recieved: $responseString")
-            weatherItem -> formatWeather(weatherItem)
-        })
-
-        // end of Retrofit stuff
+        getLastLocation()
 
 
         val gameId: UUID
@@ -522,4 +529,106 @@ class GameFragment : Fragment() {
         requireActivity().revokeUriPermission(team1PhotoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
         requireActivity().revokeUriPermission(team2PhotoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
     }
+
+    // Location stuff:
+
+    private val PERMISSION_ID = 9999
+
+    private fun checkPermission() : Boolean {
+        if(checkSelfPermission(this.requireContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+            && checkSelfPermission(this.requireContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        {
+            return true
+        }
+        return false
+    }
+
+    private fun requestPermission() {
+        requestPermissions(
+             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), PERMISSION_ID
+        )
+    }
+
+    private fun isLocationEnabled() : Boolean {
+        val locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+            LocationManager.NETWORK_PROVIDER)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if(requestCode == PERMISSION_ID) {
+            if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "You have permissions!")
+            }
+        }
+    }
+
+    private fun getLastLocation() {
+        if(checkPermission()) {
+            if(isLocationEnabled()) {
+                fusedLocationProviderClient.lastLocation.addOnCompleteListener { task ->
+                    var location: Location? = task.result
+                    if(location == null) {
+                        getNewLocation()
+                    } else {
+                        Log.d(TAG, "Your location is " + location.toString())
+                        Log.d(TAG, "Your city is :" + getCityName(location.latitude, location.longitude))
+                    }
+                }
+            } else {
+                Log.e(TAG, "Location service is not enabled")
+            }
+        } else {
+            requestPermission()
+        }
+    }
+
+    private fun getNewLocation() {
+        locationRequest = LocationRequest()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.interval = 0
+        locationRequest.fastestInterval = 0
+        locationRequest.numUpdates = 2
+        if (ActivityCompat.checkSelfPermission(
+                this.requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this.requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        fusedLocationProviderClient!!.requestLocationUpdates(
+            locationRequest,locationCallback, Looper.myLooper()
+        )
+    }
+
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(p0: LocationResult?) {
+            var lastLocation = p0?.lastLocation
+            Log.d(TAG, "last location: " + lastLocation.toString())
+        }
+    }
+
+    private fun getCityName(lat: Double, long: Double) {
+        val geoCoder = Geocoder(this.requireContext(), Locale.getDefault())
+        val address = geoCoder.getFromLocation(lat, long, 1)
+        cityName = address.get(0).locality
+
+        // Moved api call here because the call cannot happen until the city name is fetched.
+        val weatherLiveData: LiveData<WeatherItem> = WeatherFetcher().fetchWeather()
+        weatherLiveData.observe(this, Observer {
+            //responseString -> Log.d(TAG, "Response recieved: $responseString")
+                weatherItem -> formatWeather(weatherItem)
+        })
+
+    }
+
+
 }
