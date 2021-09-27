@@ -25,8 +25,8 @@ class WeatherFetcher {
         weatherApi = retrofit.create(WeatherApi::class.java)
     }
 
-    fun fetchWeather(): LiveData<WeatherItem> {
-        val responseLiveData: MutableLiveData<WeatherItem> = MutableLiveData()
+    fun fetchWeather(): LiveData<WeatherMain> {
+        val responseLiveData: MutableLiveData<WeatherMain> = MutableLiveData()
         if(cityName == null)
         {
             Log.e(TAG, "cityName is null!")
@@ -40,8 +40,7 @@ class WeatherFetcher {
             override fun onResponse(call: Call<WeatherResponse>, response: Response<WeatherResponse>) {
                 val weatherResponse: WeatherResponse? = response.body()
                 val weatherMain: WeatherMain? = weatherResponse?.weather
-                val weatherItem = weatherMain?.let { WeatherItem(weatherResponse.city, it.temp) }
-                responseLiveData.value = weatherItem
+                responseLiveData.value = weatherMain
             }
         })
         return responseLiveData

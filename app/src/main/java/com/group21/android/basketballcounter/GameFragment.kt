@@ -33,20 +33,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.gms.location.*
-import com.group21.android.basketballcounter.api.WeatherApi
 import com.group21.android.basketballcounter.api.WeatherFetcher
-import com.group21.android.basketballcounter.api.WeatherItem
 import kotlinx.android.synthetic.main.game_fragment.*
 import retrofit2.*
-import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.File
 import java.math.RoundingMode
 import java.util.*
 import kotlin.random.Random
 import java.math.BigDecimal
 import com.google.android.gms.location.LocationServices
-
-
+import com.group21.android.basketballcounter.api.WeatherMain
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -350,10 +346,10 @@ class GameFragment : Fragment() {
         weatherTextView = view.findViewById(R.id.weather) as TextView
     }
 
-    private fun formatWeather(weatherItem: WeatherItem) {
+    private fun formatWeather(weatherItem: WeatherMain) {
         val tempInF = BigDecimal((weatherItem.temp - 273.15) * (9.0/5.0) + 32).setScale(2, RoundingMode.HALF_EVEN)
 
-        weatherTextView.text = weatherItem.city + ": " + tempInF.toString() + " Fahrenheit"
+        weatherTextView.text = cityName + ": " + tempInF.toString() + " Fahrenheit"
     }
 
     private fun displayScore1(score: Int) {
@@ -622,7 +618,7 @@ class GameFragment : Fragment() {
         cityName = address.get(0).locality
 
         // Moved api call here because the call cannot happen until the city name is fetched.
-        val weatherLiveData: LiveData<WeatherItem> = WeatherFetcher().fetchWeather()
+        val weatherLiveData: LiveData<WeatherMain> = WeatherFetcher().fetchWeather()
         weatherLiveData.observe(this, Observer {
             //responseString -> Log.d(TAG, "Response recieved: $responseString")
                 weatherItem -> formatWeather(weatherItem)
